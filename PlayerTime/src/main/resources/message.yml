@@ -1,4 +1,5 @@
 command:
+  perm: "&cYou do not have permission."
   usage: "&c/ptime help"
   help:
     - "&a/ptime help &7- &bview a time help"
