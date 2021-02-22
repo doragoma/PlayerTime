@@ -1,7 +1,0 @@
-name: PlayerTime
-version: ${project.version}
-main: playertime.playertime.PlayerTime
-
-commands:
-  time:
-    description: "時間設定PL"
