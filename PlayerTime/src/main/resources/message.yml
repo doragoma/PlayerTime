@@ -1,0 +1,12 @@
+command:
+  usage: "&c/ptime help"
+  help:
+    - "&a/ptime help &7- &bview a time help"
+    - "&a/ptime reset &7- &breset the player set time"
+    - "&a/ptime night &7- &btime set the night"
+    - "&a/ptime day &7- &btime set the day"
+    - "&a/ptime reload &7- &breload a message.yml & data.yml"
+  night: "&aSet your time to night"
+  day: "&aSet your time to day"
+  reset: "&cReset a your data"
+  reload: "&aReloaded files"
