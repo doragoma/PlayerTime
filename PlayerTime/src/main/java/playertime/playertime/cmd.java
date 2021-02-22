@@ -19,51 +19,68 @@ public class cmd implements Listener, CommandExecutor {
     FileConfiguration data = YamlConfiguration.loadConfiguration(file);
     File msfile = new File("plugins/PlayerTime/message.yml");
     FileConfiguration msg = YamlConfiguration.loadConfiguration(msfile);
+
     @Override
     public boolean onCommand(CommandSender s, Command cmd, String label, String[] args) {
         Player p = (Player) s;
         if (args.length == 0) {
-            p.sendMessage(msg.getString("command.usage").replace("&","§"));
+            p.sendMessage(msg.getString("command.usage").replace("&", "§"));
             return true;
         }
         if (args[0].equalsIgnoreCase("help")) {
             List<String> list = msg.getStringList("command.help");
-            for(String msg : list){
-                p.sendMessage(msg.replace("[", "").replace("]", "").replace("&","§").replace(",",""));
+            for (String msg : list) {
+                p.sendMessage(msg.replace("[", "").replace("]", "").replace("&", "§").replace(",", ""));
             }
         }
         if (args[0].equalsIgnoreCase("night")) {
-            p.sendMessage(msg.getString("command.night").replace("&", "§"));
-            p.setPlayerTime(0, true);
-            new login().check(p, "night");
+            if (p.hasPermission("ptime.night") || p.hasPermission("ptime.set")) {
+                p.sendMessage(msg.getString("command.night").replace("&", "§"));
+                p.setPlayerTime(0, true);
+                new login().check(p, "night");
+            } else {
+                p.sendMessage(msg.getString("command.perm").replace("&", "§"));
+            }
         }
         if (args[0].equalsIgnoreCase("day")) {
-            p.sendMessage(msg.getString("command.day").replace("&", "§"));
-            p.setPlayerTime(15000, true);
-            new login().check(p, "day");
+            if (p.hasPermission("ptime.day") || p.hasPermission("ptime.set")) {
+                p.sendMessage(msg.getString("command.day").replace("&", "§"));
+                p.setPlayerTime(15000, true);
+                new login().check(p, "day");
+            } else {
+                p.sendMessage(msg.getString("command.perm").replace("&", "§"));
+            }
         }
         if (args[0].equalsIgnoreCase("reset")) {
-            p.sendMessage(msg.getString("command.reset").replace("&", "§"));
-            new login().check(p, "none");
-            return true;
+            if (p.hasPermission("ptime.reset") || p.hasPermission("ptime.set")) {
+                p.sendMessage(msg.getString("command.reset").replace("&", "§"));
+                new login().check(p, "none");
+                return true;
+            } else {
+                p.sendMessage(msg.getString("command.perm").replace("&", "§"));
+            }
         }
         if (args[0].equalsIgnoreCase("reload")) {
-            p.sendMessage(msg.getString("command.reload").replace("&", "§"));
-            try {
-                data.load(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InvalidConfigurationException e) {
-                e.printStackTrace();
+            if (p.hasPermission("ptime.reload")) {
+                p.sendMessage(msg.getString("command.reload").replace("&", "§"));
+                try {
+                    data.load(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InvalidConfigurationException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    msg.load(msfile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InvalidConfigurationException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            } else {
+                p.sendMessage(msg.getString("command.perm").replace("&", "§"));
             }
-            try {
-                msg.load(msfile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InvalidConfigurationException e) {
-                e.printStackTrace();
-            }
-            return true;
         }
         return false;
     }
